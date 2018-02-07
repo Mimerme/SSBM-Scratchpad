@@ -1,0 +1,15 @@
+Gecko Codes
+------------
+
+[Modify a PICo.dat value YYYYYYYY given offset XXXXXX]
+2265CC14 8111f880 ;Get the current menu. If it is not 8111f880 the player is not on the CSS
+40000000 804d6554 ;Get the location from the PICo.dat pointer and store it in the base address
+CE000000 80008180 ;Check to make sure ba+XXXXXX is valid
+04XXXXXX YYYYYYYY ;actually write to the address
+40000000 80000000 ;Set the base address back to 8000000
+
+[Log to 0x803fa3e8 (The debug menu memory location) Given a value YYYYYYYY]
+043fa3e8 YYYYYYYY
+
+[Log the base addrss]
+44000000 803fa3e8
