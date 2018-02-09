@@ -1,0 +1,38 @@
+ASM Misc Functions
+
+[Code that can be repurposed to modify any PICo.dat value without recompiling the iso. Also good for dereferencing a pointer and changing the address that it points to]
+mtlr r0
+lis r5, 0x804D 		;Load the constant into the lower half
+ori r5, r5, 0x6554  ;Load the constant into the uppe half
+lwz r6, 0(r5) 		;Dereference to find the memory address of the first PICo.dat value
+addi r6, r6, 0x260 	;add an offset to the mem address
+lis r7, 0x4270
+ori r7, r7, 0x0000  ;Load the new shield HP into r7
+stw r7, 0(r6) 		;replace the shield HP
+blr
+
+
+
+
+
+
+[Function for rewritting character data]
+mtlr 0
+lis r5, 0x8045
+ori r5, r5, 0x3130 	;Load the character entity data pointer
+lwz r6, 0(r5) 		;dereference the pointer
+addi r6, r6, 0x2c 	;Add the offset to the character data struct
+lwz r5, 0(r6) 		;dereference the pointer to the player character data
+addi r5, r5, 0x1998 ;Add the offset to point to the shield size
+lis r6, 0x4270
+ori r6, r6, 0x0000 	;Load 60 into r6
+stw r6, 0(r5)		;Permanently set the shield size to the value stored in r6
+blr
+
+C206B824 00000006
+7C0803A6 3CA08045
+60A53130 80C50000
+38C6002C 80A60000
+38A51998 3CC04270
+60C60000 90C50000
+4E800020 00000000
