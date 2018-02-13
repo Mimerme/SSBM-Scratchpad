@@ -1,0 +1,3 @@
+; Mods the player's physics through it's attributes struct
+lis r15, 0x4248
+stw r15, 0x16C(r31) ;Increase the gravity

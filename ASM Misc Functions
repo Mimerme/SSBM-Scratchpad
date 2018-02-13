@@ -11,9 +11,14 @@ ori r7, r7, 0x0000  ;Load the new shield HP into r7
 stw r7, 0(r6) 		;replace the shield HP
 blr
 
+[Revised code written by Punkline]
+; INJ @ 8006b80c -- for each player, each frame
+; r31 = contextual player data start address
 
-
-
+lis r6, 0x4270		; Load FP 60.0 into r6
+stw r6, 0x1998(r31)	; Store the FP into the memory addres of shield HP
+lwz r0, 0x007C (sp) ; original hook instruction
+; gecko will compile a return branch to the line after your injection hook
 
 
 [Function for rewritting character data]

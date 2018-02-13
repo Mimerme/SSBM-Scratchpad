@@ -1,0 +1,7 @@
+; Read memory address @ 804c1faf lower nibble for d-pad P1
+; if 0b0010 then right-pad
+; if 0b0001 then left-pad
+
+; apply AND with mask of 0b00xx to filter out other button presses
+; compare immediate and store in CR0
+; if equals then spawn random item/break

@@ -1,0 +1,6 @@
+; Modifies the values located in PICo.dat without rebuilding the ISO
+; TODO: Check if r15 is 0x00000000 @ time of execution. If so find a replacement register
+
+lis r15m, 0x804d
+ori r15, r15, 0x6554 ;Load the PICo.dat pointer data
+li

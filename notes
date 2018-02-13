@@ -5,3 +5,25 @@ max arg size
 
 min arg size
 32767
+
+Action State Codes
+-------------------
+B6 - GuardReflect
+B3 - Guard
+
+
+DESIGN
+-------
+- 1 Jump default
+- Shorter jump animations
+	- Jumps must be short enough to allow for all areial attacks 
+- Faster arields
+- Auto L-cancel
+- Backpedeling
+	- slower than moving forward
+- Buffed shielding/blocking
+	- Faster animations
+		- Faster in/out of shield
+	- Wider coverage
+- No turn arounds
+	- If players change positions then turn around

@@ -16,8 +16,8 @@ CE000000 80008180 ;Check to make sure ba+XXXXXX is valid
 
 [CODE]
 mtlr r0
-lis r5, 0x804D 		;Load the constant into the lower half
-ori r5, r5, 0x6554  ;Load the constant into the uppe half
+lis r5, 0x804D 		;Load the constant into the upper half
+ori r5, r5, 0x6554  ;Load the constant into the lower half
 lwz r6, 0(r5) 		;Dereference to find the memory address of the first PICo.dat value
 addi r6, r6, 0x260 	;add an offset to the mem address
 lis r7, 0x4270
@@ -33,3 +33,39 @@ blr
 
 [Fixed camera]
 04452c6c 00000004
+
+[ASM Code]
+; INJ @ 8006b80c -- for each player, each frame
+; r31 = contextual player data start address
+
+; infinite shield code
+lis r15, 0x4270		; Load FP 60.0 into r6
+stw r15, 0x1998(r31)	; Store the FP into the memory addres of shield HP
+; gecko will compile a return branch to the line after your injection hook
+
+;Player physics ASM
+lis r15, 0x3dcc		  ; Set gravity value in the upper half
+ori r15, r15, 0xcccd  ; Set gravity value in the lower half
+stw r15, 0x16C(r31) ;Increase the gravity
+
+;Always Tilt Forward ASM
+lwz r15, 0x10(r31)		;Load the 'player_action' data into r15
+cmpi 0, r15, 0x0000000b3;Compare and store result in Compare Register (CR) field 0
+
+bc 0b01100, 2, 8 		;Branch if the 2nd bit (is equals) is TRUE. If so branch 8 bytes (1 instruction) ahead and continue with the shield angle code
+b 20					;Relative branch 32 bytes (3 instructions ahead)
+lis r15, 0x3f80
+stw r15, 0x2344(r31)
+lis r15, 0x4120
+stw r15, 0x2348(r31)
+
+; reset r15 back to 0
+lis r15, 0x0000
+
+; original hook instruction
+lwz r0, 0x007C (sp)
+
+[Code]
+C206B80C 00000002
+3CC04270 90DF1998
+8001007C 00000000
