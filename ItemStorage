@@ -2,6 +2,60 @@
 ; if 0b0010 then right-pad
 ; if 0b0001 then left-pad
 
+;Andrew and miranda 1 dollar
+
+; allocate memory to for the gecko code
+br d(pc)
+
+nop
+nop
+nop
+
+p1slotptr: .byte 0
+p2slotptr: .byte 0
+p3slotptr: .byte 0
+p4slotptr: .byte 0
+
+p1slot_1: .byte 0
+p1slot_2: .byte 0
+p1slot_3: .byte 0
+p1slot_4: .byte 0
+
+p2slot_1: .byte 0
+p2slot_2: .byte 0
+p2slot_3: .byte 0
+p2slot_4: .byte 0
+
+p3slot_1: .byte 0
+p3slot_2: .byte 0
+p3slot_3: .byte 0
+p3slot_4: .byte 0
+
+p4slot_1: .byte 0
+p4slot_2: .byte 0
+p4slot_3: .byte 0
+p4slot_4: .byte 0
+
+br d(pc)
+---Subroutine move pointer---
+; accepts arguments player pointer, add/sub amount, 
+;                   r31           , r3
+
+lbz r, 0x0C(r31) ;load the player index
+addi r, r, d(pc) ;d must be the length of the instructions above this intstruction. DEBUG: add using displacement. Instruction may be incorrect
+lbz r, (r)
+add r3, r, r3
+store r, r3       ; store r3 into r
+------
+
+
+lbz r15, 0(0x804c1faf)
+andis r13, r15, 0x0006
+andis r14, r15, 0x0002 ;DEBUG which order bits are the ands stored in
+cmpi 1, r13, 0x0006
+cmpi 2, r14, 0x0002
+
+
 ; apply AND with mask of 0b00xx to filter out other button presses
 ; compare immediate and store in CR0
 ; if equals then spawn random item/break
