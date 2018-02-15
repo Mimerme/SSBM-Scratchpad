@@ -2,14 +2,6 @@
 ; if 0b0010 then right-pad
 ; if 0b0001 then left-pad
 
-;Andrew and miranda 1 dollar
-
-; allocate memory to for the gecko code
-br d(pc)
-
-nop
-nop
-nop
 
 p1slotptr: .byte 0
 p2slotptr: .byte 0
@@ -36,6 +28,13 @@ p4slot_2: .byte 0
 p4slot_3: .byte 0
 p4slot_4: .byte 0
 
+; allocate memory to for the gecko code
+br d(pc)
+
+nop
+nop
+nop
+
 br d(pc)
 ---Subroutine move pointer---
 ; accepts arguments player pointer, add/sub amount, 
@@ -48,8 +47,9 @@ add r3, r, r3
 store r, r3       ; store r3 into r
 ------
 
+.set P1_CONTROLLER_DIG, 0x804c1faf
 
-lbz r15, 0(0x804c1faf)
+lbz r15, 0(P1_CONTROLLER_DIG)
 andis r13, r15, 0x0006
 andis r14, r15, 0x0002 ;DEBUG which order bits are the ands stored in
 cmpi 1, r13, 0x0006
