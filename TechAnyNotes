@@ -1,0 +1,17 @@
+NAME: TechCheck
+ADDRESS: 0x800986b0
+DESCRIPTION: Executed when a check for teching is required. Will execcute 80098718 if needed to tech
+REGISTERS: Player Entity Struct
+ARGUMENTS:					 r3
+INVOVLED REGISTERS: r3 initially contains the entity struct, but then loads in the player data struct
+DESCRIPTIONS	  :
+
+
+
+
+1: move the contents opf r0 into link register
+2: save the contents of r0 to sp + 0x0004 
+3: 
+
+
+80d10a84
