@@ -7,7 +7,7 @@
 .set DEBUG_HIGH, 0x803f
 .set DEBUG_LOW, 0xa3e8
 .set TECH_HIGH, 0x8009
-.set TECH_LOW, 0x86b0
+.set TECH_LOW, 0x872c
 .set LEFT_MASK_HIGH, 0x0100
 
 ;Load all of the constants into unused registers
@@ -20,17 +20,41 @@ ori r21, r21, TECH_LOW
 lis r14, DEBUG_HIGH
 ori r14, r14, DEBUG_LOW
 
-lis r22, LEFT_MASK_HIGH,
+lis r22, LEFT_MASK_HIGH
+
+lis r19, TECH_HIGH
+ori r19, r19, TECH_LOW
+
 ; r14 is the first bytes of the debug menu
 ; r15 is the player controller digital input
 ; r21 is the tech function to execute
 ; r22 is the temp storage for the AND masks
+; r19 address of the function to execute
+; r18 is the storage of the original r3 value
+
+mtctr r19
 
 lwz r15, 0(r15)	;Load the controller digital input into r15
 
 and r16, r15, r22 ;Apply the mask to filter out other buttons
 cmp 0, r16, r22	;Compare with the mask
-bca 0b01100, 2, (r21)	;Branch if equal
+
+
+; Perform some handling before the prolog
+addi r18, r3, 0
+addi r3, r31, 0
+lwz r3, 0(r3)
+bc 0b00101, 2, 12	;Skip the blr instruction if function execution if no pressed
+stb 0x00, 0x680(r31);0 frames since L/R
+bcctrl 0b10100, 2	;Branch if equal
+addi r3, r18, 0
+
+and r15, r15, r23
+and r14, r14, r23
+and r21, r21, r23
+and r22, r22, r23
+and r19, r19, r23
+and r18, r18, r23
 
 ;TODO: Properly reset the registers. TBH most likely don't have to
 ; reset r15 back to 0
@@ -38,3 +62,5 @@ lis r15, 0x0000
 
 ; original hook instruction
 lwz r0, 0x007C (sp)
+
+
