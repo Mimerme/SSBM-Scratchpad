@@ -1,0 +1,38 @@
+; To be injected @ 8006b80c on player updates
+; TODO: Check to see if this code can be compressed
+
+;DOCUMENTATION: Introduction is the basic code for checking if left-d-pad is pressed
+.set ACTION_HIGH, 0X8006
+.set ACTION_LOW, 0x93ac
+
+;Load all of the constants into unused registers
+lis r21, ACTION_HIGH
+ori r21, r21, ACTION_LOW
+
+lwz r15, 0x676(r31)		;Load 'Frames since d-pad down' [Check the offset] and corresponding register
+
+cmpi 0, r15, 0			; Compare to see if zero
+bc 0b00101, 2, 0x34		; if not equal skip over these following instructions
+stw r3, 0x4(sp)			; store the registers on the stack
+stw r4, 0x8(sp)
+
+stwu sp, -12(sp)		; grow stack frame to fit sp, r3, and r4
+stw r3, 4(sp)			; push r3
+stw r4, 8(sp)			; push r4
+
+lwz r3, 0x0(r31)		; prepare the arguments and registers
+li r4, 0x00CB
+
+mtctr r21				; call ACTION
+bcctrl 0b10100, 2
+
+lwz	r3, 0x4(sp)
+lwz r4, 0x8(sp)			; pop the registers off the stack
+addi sp, sp, 0x12 		; reset the stack frame
+
+;TODO: Properly reset the registers. TBH most likely don't have to
+; reset r15 back to 0
+lis r15, 0x0000
+
+; original hook instruction
+lwz r0, 0x007C (sp)

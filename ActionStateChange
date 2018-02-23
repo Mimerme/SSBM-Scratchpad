@@ -1,0 +1,5 @@
+ActionStateChange 0X800693ac
+Registers:	f1, f2, f3, 							 r3, 			  r4, 		  r5, 	 	  r6
+Arguments:	uk, uk, uk, pointer to player entity struct, Action State ID, uk (zero?), uk (zero?)
+
+f2 : 3ff0000000000000

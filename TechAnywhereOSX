@@ -1,0 +1,42 @@
+; To be injected @ 8006b80c on player updates
+; TODO: Check to see if this code can be compressed
+
+;DOCUMENTATION: Introduction is the basic code for checking if left-d-pad is pressed
+.set P1_CONTROLLER_HIGH, 0x804c
+.set P1_CONTROLLER_LOW, 0x1faf
+.set DEBUG_HIGH, 0x803f
+.set DEBUG_LOW, 0xa3e8
+.set TECH_HIGH, 0x8009
+.set TECH_LOW, 0x86b0
+.set LEFT_MASK_HIGH, 0x0100
+
+;Load all of the constants into unused registers
+lis r15, P1_CONTROLLER_HIGH
+ori r15, r15, P1_CONTROLLER_LOW
+
+lis r21, TECH_HIGH
+ori r21, r21, TECH_LOW
+
+lis r14, DEBUG_HIGH
+ori r14, r14, DEBUG_LOW
+
+lis r22, LEFT_MASK_HIGH,
+; r14 is the first bytes of the debug menu
+; r15 is the player controller digital input
+; r21 is the tech function to execute
+; r22 is the temp storage for the AND masks
+
+lwz r15, 0(r15)	;Load the controller digital input into r15
+
+and r16, r15, r22 ;Apply the mask to filter out other buttons
+cmp 0, r16, r22	;Compare with the mask
+bca 0b01100, 2, (r21)	;Branch if equal
+
+;TODO: Properly reset the registers. TBH most likely don't have to
+; reset r15 back to 0
+lis r15, 0x0000
+
+; original hook instruction
+lwz r0, 0x007C (sp)
+
+

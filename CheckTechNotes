@@ -1,0 +1,6 @@
+0x800986b0
+function Check_Tech:
+parameters:
+corres reg:
+
+description
