@@ -1,27 +1,42 @@
+
 ; To be injected @ 8006b80c on player updates
 ; TODO: Check to see if this code can be compressed
 
 ;DOCUMENTATION: Introduction is the basic code for checking if left-d-pad is pressed
-.set ACTION_HIGH, 0X8006
+.set ACTION_HIGH, 0x8006
 .set ACTION_LOW, 0x93ac
+
+
+lbz r15, 0x682(r31)		;Load 'Frames since d-pad down' [Check the offset] and corresponding register
+
+cmpi 0, r15, 0			; Compare to see if zero
+bc 0b00101, 2, 96		; if not equal skip over these following instructions
+
+; The following is to filter out garbage register data
+lwz r15, 0x0(r31)		; Load what should be the entity data pointer
+andis. r15, r15, 0x8000	; Apply an AND mask to check that the first 2 digits are '80'
+						; Should AND with the higher order bits
+lis r21, 0x8000
+cmp 0, r15, r21			; Check to make sure player is actually initialized
+bc 0b00101, 2, 76		; if not initialized skip over the following instructions
+
+stwu sp, -40(sp)		; grow stack frame to fit sp, r3, and r4
+stw r3, 4(sp)			; push r3
+stw r4, 8(sp)			; push r4
+stw r5, 12(sp)
+stw r6, 16(sp)
+
+
+lwz r3, 0x0(r31)		; prepare the arguments and registers
+li r4, 0x00CB
+ori r5, r5, 0
+lis r5, 0
+ori r6, r6, 0
+lis r6, 0
 
 ;Load all of the constants into unused registers
 lis r21, ACTION_HIGH
 ori r21, r21, ACTION_LOW
-
-lwz r15, 0x676(r31)		;Load 'Frames since d-pad down' [Check the offset] and corresponding register
-
-cmpi 0, r15, 0			; Compare to see if zero
-bc 0b00101, 2, 0x34		; if not equal skip over these following instructions
-stw r3, 0x4(sp)			; store the registers on the stack
-stw r4, 0x8(sp)
-
-stwu sp, -12(sp)		; grow stack frame to fit sp, r3, and r4
-stw r3, 4(sp)			; push r3
-stw r4, 8(sp)			; push r4
-
-lwz r3, 0x0(r31)		; prepare the arguments and registers
-li r4, 0x00CB
 
 mtctr r21				; call ACTION
 bcctrl 0b10100, 2

@@ -1,0 +1,54 @@
+1. Move Link register to r0
+2. Store r0 on stack
+3. Store f31 on stack
+4. move __f3__ into f31
+5. store f30 onto stack
+6. move __f2__ to f30
+7. store f29 on stack
+8. move __f1__ to f29	;wtf is with these floats
+9. Store r22 - r31 onto stack
+10. move __r4__ to r24
+11. move __r3__ to r30
+12. addi __r5__ to r31
+13. addi __r6__ to r23
+14.	Load some values from player pointer into r26 & r27 
+15. `												   `
+16. Compare r27 with 0
+17. store __r24__ into struct of [r26]
+18. load stuff into f0 from R26
+19. move the stuff into r26
+20. 
+21. sub 31904 from __r13__
+
+Required registers
+f1, f2, f3, r3, r4, r5, r6, r13
+
+==Initalize Game State (P1 Prob)==
+f1:	0000000000000000 0000000000000000
+f2: 3ff0000000000000 3ff0000000000000
+f3: 0000000000000000 0000000000000000
+r3: 80c6b900 (player entity)
+r4: 00000142 (action id)
+r5: 00000000
+r6: 00000000
+r13: 804db6a0 (constant?)
+
+==Dash P1==
+f1:	0000000000000000 0000000000000000
+f2: 3ff0000000000000 3ff0000000000000
+f3: 0000000000000000 0000000000000000
+r3: ******** (player entity)
+r4: 0000000f (action id)
+r5: 00000000
+r6: 00000000
+r13: 804db6a0 (constant?)
+
+==Jump P1==
+f1:	0000000000000000 0000000000000000
+f2: 3ff0000000000000 3ff0000000000000
+f3: 0000000000000000 3fe0000000000000
+r3: ******** (player entity)
+r4: 00000018 (action id)
+r5: 00000000
+r6: 00000000
+r13: 804db6a0 (constant?)
